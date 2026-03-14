@@ -2,22 +2,22 @@
 
 Вывод команды neofetch:
 
-OS: Kubuntu 22.04.5 LTS x86_64 
-Host: NBLK-WAX9X M1010 
-Kernel: 6.8.0-101-generic 
-Uptime: 1 hour, 57 mins 
-Packages: 3404 (dpkg), 126 (brew), 22 (snap) 
-Shell: zsh 5.8.1 
-Resolution: 1920x1080 
-DE: Plasma 5.24.7 
-WM: KWin 
-WM Theme: Nostrum 
-Theme: [Plasma], Breeze [GTK3] 
-Icons: Blue-Accent-Icons-for-linux-master [Plasma], Blue-Accent-Icons-for-li 
-Terminal: kitty 
-CPU: AMD Ryzen 5 3500U with Radeon Vega Mobile Gfx (8) @ 2.100GHz 
-GPU: AMD ATI Radeon Vega Series / Radeon Vega Mobile Series 
-Memory: 3474MiB / 6865MiB 
+- OS: Kubuntu 22.04.5 LTS x86_64
+- Host: NBLK-WAX9X M1010
+- Kernel: 6.8.0-101-generic
+- Uptime: 1 hour, 57 mins
+- Packages: 3404 (dpkg), 126 (brew), 22 (snap)
+- Shell: zsh 5.8.1
+- Resolution: 1920x1080
+- DE: Plasma 5.24.7
+- WM: KWin
+- WM Theme: Nostrum
+- Theme: [Plasma], Breeze [GTK3]
+- Icons: Blue-Accent-Icons-for-linux-master [Plasma], Blue-Accent-Icons-for-li
+- Terminal: kitty
+- CPU: AMD Ryzen 5 3500U with Radeon Vega Mobile Gfx (8) @ 2.100GHz
+- GPU: AMD ATI Radeon Vega Series / Radeon Vega Mobile Series
+- Memory: 3474MiB / 6865MiB 
 
 Что использовалось в работе:
 - редактор: helix
