@@ -45,26 +45,6 @@
 
 **Как подключиться к БД: pgcli postgres://postgres:postgres@localhost:5432/postgres**
 
-
-Все команды, которые нужны будут
-```text
-up:
-	docker compose up -d
-
-down:
-	docker compose down -v
-
-logs (на случай, если будет создаваться секунд 20, чтобы посмотреть и понять, что все ок):
-	docker logs -f postgres
-
-psql:
-	pgcli postgres://postgres:postgres@localhost:5432/postgres
-
-rebuild:
-	docker compose down -v
-	docker compose up -d
-```
-
 ### Тут вспомогательная информация, собственно как вообще появился файл 01_load.sql
 
 Как я импортировал данные в бд
@@ -213,17 +193,3 @@ GROUP BY product_name, supplier_name;
 - DDL-скрипты (init/02_ddl.sql): Описывает структуру таблиц с использованием первичных (PRIMARY KEY) и внешних ключей (FOREIGN KEY). Использование внешних ключей гарантирует ссылочную целостность данных.
 - DML-скрипты (init/03_dml.sql): Реализует логику миграции данных из плоской таблицы mock_data в нормализованную структуру.
 
-На диаграмме выглядит так:
-![Иллюстрация: Снежинка](Diagram.png)
-
-
-
-
-Дополнительно в /init еще создал 04_views.sql
-Там что-то типо аналитики: топ-5 самых прибыльных товаров и продажи по странам магазинов
-Пользоваться так:
-```sql
-SELECT * FROM view_top_products;
-
-SELECT * FROM view_revenue_by_country;
-```
