@@ -1,0 +1,88 @@
+services:
+  # 1. PostgreSQL (Источник)
+  db:
+    image: postgres:16-alpine
+    container_name: postgres_db
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=lab_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./init:/docker-entrypoint-initdb.d
+      - ./data:/var/lib/postgresql/data_files
+    networks:
+      - spark-net
+
+  # 2. ClickHouse (Отчеты)
+  clickhouse:
+    image: clickhouse/clickhouse-server
+    container_name: clickhouse_db
+    environment:
+      - CLICKHOUSE_USER=user
+      - CLICKHOUSE_PASSWORD=password
+      - CLICKHOUSE_DB=reports
+    ports:
+      - "8123:8123"
+      - "9000:9000"
+    networks:
+      - spark-net  
+    
+  # 3. Spark Master
+  spark-master:
+    image: apache/spark:3.5.0
+    container_name: spark_master
+    environment:
+      - SPARK_MASTER_HOST=spark-master
+      - SPARK_MASTER_PORT=7077
+      - SPARK_MASTER_WEBUI_PORT=8080
+    ports:
+      - "8080:8080"
+      - "7077:7077"
+    volumes:
+      - ./jars:/opt/spark/drivers
+    command: /opt/spark/bin/spark-class org.apache.spark.deploy.master.Master --host spark-master --port 7077 --webui-port 8080
+    networks:
+      - spark-net
+
+  # 4. Spark Worker
+  spark-worker:
+    image: apache/spark:3.5.0
+    container_name: spark_worker
+    environment:
+      - SPARK_WORKER_MEMORY=2G
+      - SPARK_WORKER_CORES=1
+      - SPARK_WORKER_WEBUI_PORT=8081
+    ports:
+      - "8081:8081"  # Web UI воркера
+    volumes:
+      - ./jars:/opt/spark/drivers
+    depends_on:
+      - spark-master
+    command: /opt/spark/bin/spark-class org.apache.spark.deploy.worker.Worker spark://spark-master:7077 --webui-port 8081
+    networks:
+      - spark-net
+
+  # 5. Jupyter Notebook
+  jupyter:
+    image: jupyter/pyspark-notebook:spark-3.5.0
+    container_name: jupyter_pyspark
+    user: root
+    ports:
+      - "8888:8888"
+    volumes:
+      - ./notebooks:/home/jovyan/work
+      - ./jars:/opt/spark/drivers
+    environment:
+      - JUPYTER_ENABLE_LAB=yes
+      - PYSPARK_SUBMIT_ARGS=--jars /opt/spark/drivers/postgresql-42.7.1.jar,/opt/spark/drivers/clickhouse-jdbc-0.6.0.jar pyspark-shell
+      # Важно: указываем, что драйвер будет доступен по этому адресу
+      - SPARK_LOCAL_IP=jupyter_pyspark
+    command: start-notebook.sh --ServerApp.token='' --ServerApp.password='' --ServerApp.disable_check_xsrf=True
+    networks:
+      - spark-net
+
+networks:
+  spark-net:
+    driver: bridge
